@@ -65,4 +65,15 @@ def Find_text(text):
 
 def Del_note(numb):
     db = Read_db()
-    print(db)
+    for i in range(len(db)-1):
+        for key, val in db[i].items():
+            if numb == key:
+                db.remove(db[i])
+    with open("notebooks.db", "w", encoding='utf-8') as file:
+        for item in db:
+            file.write(str(item))
+        file.close()
+    print("\n" * 100)
+    print("Запись удалена")
+    print("\n" * 3)
+    view.Second_screen()
