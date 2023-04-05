@@ -97,7 +97,7 @@ def Del_note(numb):
         for key, val in db[i].items():
             if numb == key:
                 db.remove(db[i])
-    with open("notebooks.db", "w", encoding='utf-8') as file:
+    with open("notebooks.cvs", "w", encoding='utf-8') as file:
         for item in db:
             file.write(str(item))
         file.close()
@@ -142,3 +142,77 @@ def Show_all():
                 print(f"Дата последнего изменения {result[3]}")
 
     view.Second_screen()
+
+
+def Edit_note():
+    numb = input("\nВведите номер редактируемой записи:\n--> ")
+    db = Read_db()
+    edit = {}
+    for item in db:
+        for key, val in item.items():
+            if numb == key:
+                edit = item
+    for i in range(len(db)-1):
+        for key, val in db[i].items():
+            if numb == key:
+                db.remove(db[i])
+    action = input(
+        "Выберете пункт редактирования:\n1 - название:\n2 - содержимое:\nВведите пункт --> ")
+    while (int(action) < 1 or int(action) > 2):
+        action = input("ВЫБРАН НЕ ВЕРНЫЙ ПУНКТ !!!\nВведите верный пункт меню ")
+    today = datetime.datetime.today()
+    today = today.strftime("%m/%d/%Y")
+    Print_note(edit)
+    match action:
+        case '1':
+            print("\n")
+            result = []
+            for keys, val in edit.items():
+                result.append(val[1])
+                result.append(val[2])
+            action = input("Введите новое название --> ")
+            new_note = {}
+            new_note[numb] = [action, result[0], result[1], today]
+            db.append(new_note)
+            with open("notebooks.cvs", "w", encoding='utf-8') as file:
+                for i in range(len(db)):
+                    item = str(db[i]).replace("{", "").replace("}", "").replace("'", "").replace(":", ",")\
+                        .replace("[", "").replace("]", "").replace(",", ";")
+                    if i == (len(db) - 1):
+                        file.write(f'{item}')
+                    else:
+                        file.write(f'{item}\n')
+                file.close()
+
+            # print("\n" * 100)
+            print("Запись сохранена\n")
+            view.Second_screen()
+        case '2':
+            print("\n")
+            result = []
+            for keys, val in edit.items():
+                result.append(val[0])
+                result.append(val[2])
+            action = input("Введите новое название --> ")
+            new_note = {}
+            new_note[numb] = [result[0], action, result[1], today]
+            db.append(new_note)
+            with open("notebooks.cvs", "w", encoding='utf-8') as file:
+                for i in range(len(db)):
+                    item = str(db[i]).replace("{", "").replace("}", "").replace("'", "").replace(":", ",") \
+                        .replace("[", "").replace("]", "").replace(",", ";")
+                    if i == (len(db) - 1):
+                        file.write(f'{item}')
+                    else:
+                        file.write(f'{item}\n')
+                file.close()
+            print("Запись сохранена\n")
+            view.Second_screen()
+            print("\n")
+            action = input("Введите новый текст -->")
+            db = Read_db()
+            for item in db:
+                for key, val in item.items():
+                    if action in val[0]:
+                        Print_note(item)
+            view.Second_screen()

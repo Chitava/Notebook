@@ -16,7 +16,7 @@ def First_screen():
         case '3':
             controller.Show_all()
         case '4':
-            print(4)
+            controller.Edit_note()
         case '5':
             controller.Del_note()
         case '6':
@@ -38,7 +38,7 @@ def Second_screen():
         case '3':
             controller.Show_all()
         case '4':
-            print(4)
+            controller.Edit_note()
         case '5':
             controller.Del_note()
         case '6':
