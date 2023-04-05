@@ -8,7 +8,7 @@ def Create_note(name, text, create):
     id = len(db)+1
     note = f"{id}; {name}; {text}; {create}"
 
-    with open("notebooks.db", "a", encoding='utf-8') as file:
+    with open("notebooks.cvs", "a", encoding='utf-8') as file:
         file.write(f'\n{note}')
         file.close()
     print("\n"*100)
@@ -17,12 +17,12 @@ def Create_note(name, text, create):
 
 def Read_db():
     notes = []
-    with open("notebooks.db", "r", encoding='utf-8') as file:
+    with open("notebooks.cvs", "r", encoding='utf-8') as file:
         temp = []
         while True:
             temp_note = {}
             val = []
-            line = (file.readline().replace("\n", ""))
+            line = file.readline().replace("\n", "")
             if line != "":
                 temp= line.split(";")
             else:
@@ -77,3 +77,6 @@ def Del_note(numb):
     print("Запись удалена")
     print("\n" * 3)
     view.Second_screen()
+
+
+

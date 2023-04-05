@@ -17,7 +17,7 @@ def First_screen():
         case '2':
             Find()
         case '3':
-            print(3)
+            Show_all()
         case '4':
             print(4)
         case '5':
@@ -28,7 +28,7 @@ def First_screen():
 
 def Second_screen():
     action = input(
-        "Продолжаем работать в приложении!\nВыберете действие:\n1 - Создать записку\n2 - Найти записку"
+        "\nПродолжаем работать в приложении!\nВыберете действие:\n1 - Создать записку\n2 - Найти записку"
         "\n3 - Просмотреть все записки\n4 - Редактировать записку\n5 - Удалить записку\n6 - Выход из программы\nВведите "
         "цифру действия --> ")
     while (int(action) < 1 or int(action) > 6):
@@ -39,7 +39,7 @@ def Second_screen():
         case '2':
             Find()
         case '3':
-            print(3)
+            Show_all()
         case '4':
             print(4)
         case '5':
@@ -136,4 +136,25 @@ def Del_note():
     # print("\n" * 100)
     action = input("Введите номер записи которую нужно удалить -->")
     controller.Del_note(action)
+    Second_screen()
+
+
+def Show_all():
+    db = controller.Read_db()
+    result = []
+    for item in db:
+        result = []
+        for keys, val in item.items():
+            result.append(val[0])
+            result.append(val[1])
+            result.append(val[2])
+            if len(val) > 3:
+                result.append(val[3])
+            if len(result) == 0:
+                print("Записей нет")
+            else:
+                print(f"\nЗапись № {keys}\nНазвание{result[0]}\n{result[1]}\nДата создания{result[2]}")
+            if len(item.values()) == 4:
+                print(f"Дата последнего изменения {result[3]}")
+
     Second_screen()
