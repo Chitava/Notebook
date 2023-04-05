@@ -1,13 +1,18 @@
 import json
 from pathlib import Path
 import view
+import datetime
 
 
-def Create_note(name, text, create):
+def Create_note():
+    print("\n" * 100)
+    today = datetime.datetime.today()
+    today = today.strftime("%m/%d/%Y")
+    name = input('Введите название записи и нажмите "Enter"\n')
+    text = input('Напишите техт заметки и нажмите "Enter"\n')
     db = Read_db()
     id = len(db)+1
-    note = f"{id}; {name}; {text}; {create}"
-
+    note = f"{id}; {name}; {text}; {today}"
     with open("notebooks.cvs", "a", encoding='utf-8') as file:
         file.write(f'\n{note}')
         file.close()
@@ -35,33 +40,56 @@ def Read_db():
         file.close()
     return notes
 
-def Find_numb(numb):
-    db = Read_db()
-    result = {}
-    for item in db:
-        for key, val in item.items():
-            if numb == key:
-                result = item
-    return result
 
-def Find_name(name):
-    db = Read_db()
-    result = {}
-    for item in db:
-        for key, val in item.items():
-            if name in val[0]:
-                result = item
-    return result
-
-
-def Find_text(text):
-    db = Read_db()
-    result = {}
-    for item in db:
-        for key, val in item.items():
-            if text in val[1]:
-                result = item
-    return result
+def Find():
+    print("\n" * 100)
+    action = input(
+        "Выберете метод поиска:\n1 - по номеру:\n2 - по названию:\n3 - по содержимому:"
+        "\n4 - по дате:\n5 - выход в главное меню:\n6 - Выход из программы\nВведите цифру действия --> ")
+    while (int(action) < 1 or int(action) > 6):
+        action = input("ВЫБРАН НЕ ВЕРНЫЙ ПУНКТ !!!\nВведите верный пункт меню ")
+    match action:
+        case '1':
+            print("\n" * 100)
+            action = input("Введите номер записи -->")
+            db = Read_db()
+            for item in db:
+                for key, val in item.items():
+                    if action == key:
+                        Print_note(item)
+            view.Second_screen()
+        case '2':
+            print("\n" * 100)
+            action = input("Введите название записи -->")
+            db = Read_db()
+            for item in db:
+                for key, val in item.items():
+                    if action in val[0]:
+                        Print_note(item)
+            view.Second_screen()
+        case '3':
+            print("\n" * 100)
+            action = input("Введите строку поиска -->")
+            db = Read_db()
+            for item in db:
+                for key, val in item.items():
+                    if action in val[1]:
+                        Print_note(action)
+            view.Second_screen()
+        case '4':
+            print("\n" * 100)
+            action = input("Введите число, либо месяц, либо год создания -->")
+            db = Read_db()
+            for item in db:
+                for key, val in item.items():
+                    if action in val[2]:
+                        Print_note(action)
+            view.Second_screen()
+        case '5':
+            print("\n" * 100)
+            view.Second_screen()
+        case '6':
+            exit()
 
 def Del_note(numb):
     db = Read_db()
@@ -79,4 +107,38 @@ def Del_note(numb):
     view.Second_screen()
 
 
+def Print_note(note):
+    result = []
+    for keys, val in note.items():
+        result.append(val[0])
+        result.append(val[1])
+        result.append(val[2])
+        if len(val) > 3:
+            result.append(val[3])
+    if len(result) == 0:
 
+        print("\nЗаписи с таким номер не существует")
+    else:
+        print(f"\nЗапись № {keys}\nНазвание{result[0]}\n{result[1]}\nДата создания{result[2]}")
+    if len(note.values()) == 4:
+        print(f"Дата последнего изменения {result[3]}")
+
+
+def Show_all():
+    db = Read_db()
+    for item in db:
+        result = []
+        for keys, val in item.items():
+            result.append(val[0])
+            result.append(val[1])
+            result.append(val[2])
+            if len(val) > 3:
+                result.append(val[3])
+            if len(result) == 0:
+                print("Записей нет")
+            else:
+                print(f"\nЗапись № {keys}\nНазвание{result[0]}\n{result[1]}\nДата создания{result[2]}")
+            if len(item.values()) == 4:
+                print(f"Дата последнего изменения {result[3]}")
+
+    view.Second_screen()
